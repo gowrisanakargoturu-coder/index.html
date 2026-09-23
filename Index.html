@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mega Quiz Portal - Movies, GK & Politics</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Telugu:wght@400;600;700&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans Telugu', sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .pulse-glow {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+    .fade-in {
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center p-4">
+
+  <!-- Header / Navbar -->
+  <header class="w-full max-w-4xl flex justify-between items-center py-4 px-6 glass-card rounded-2xl mb-6">
+    <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+      <div class="bg-blue-600 p-2.5 rounded-xl text-white">
+        <i class="fa-solid fa-[#brain] fa-brain text-xl"></i>
+      </div>
+      <div>
+        <h1 class="font-extrabold text-xl tracking-wide bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">QUIZ MASTER</h1>
+        <p class="text-xs text-slate-400">Movies • GK • Politics</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <!-- Language Toggle -->
+      <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold hover:border-blue-500 transition">
+        <i class="fa-solid fa-[#language] fa-language mr-1"></i> <span id="lang-btn-text">TE / EN</span>
+      </button>
+      
+      <!-- Current Score -->
+      <div class="px-3 py-1.5 rounded-lg bg-blue-950/60 border border-blue-500/30 text-xs font-semibold text-blue-400">
+        Score: <span id="user-score" class="text-white font-bold">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="w-full max-w-4xl flex-1 flex flex-col justify-center">
+
+    <!-- 1. MODULE SELECTION SCREEN -->
+    <div id="module-select-screen" class="fade-in space-y-6 text-center">
+      <div class="space-y-2">
+        <h2 class="text-3xl font-extrabold text-white">Select Quiz Category</h2>
+        <p class="text-slate-400 text-sm">Prathi Module lo 200 Questions (Beginner ➔ Medium ➔ Very Hard)</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+        
+        <!-- Movies Module -->
+        <div onclick="startQuiz('movies')" class="glass-card p-6 rounded-2xl cursor-pointer hover:scale-105 hover:border-blue-500 transition duration-300 group flex flex-col items-center">
+          <div class="w-16 h-16 rounded-2xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 text-2xl mb-4 group-hover:bg-pink-500 group-hover:text-white transition">
+            <i class="fa-solid fa-[#film] fa-film"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-1">Movies</h3>
+          <p class="text-xs text-slate-400">Telugu & Hindi Cinema, Releases, Stars & Trivia</p>
+          <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-pink-400">200 Questions</span>
+        </div>
+
+        <!-- GK & UPSC Module -->
+        <div onclick="startQuiz('gk')" class="glass-card p-6 rounded-2xl cursor-pointer hover:scale-105 hover:border-blue-500 transition duration-300 group flex flex-col items-center">
+          <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl mb-4 group-hover:bg-amber-500 group-hover:text-white transition">
+            <i class="fa-solid fa-[#graduation-cap] fa-graduation-cap"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-1">General GK & UPSC</h3>
+          <p class="text-xs text-slate-400">History, Geography, Science & Standard GK</p>
+          <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-amber-400">200 Questions</span>
+        </div>
+
+        <!-- Politics Module -->
+        <div onclick="startQuiz('politics')" class="glass-card p-6 rounded-2xl cursor-pointer hover:scale-105 hover:border-blue-500 transition duration-300 group flex flex-col items-center">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-2xl mb-4 group-hover:bg-emerald-500 group-hover:text-white transition">
+            <i class="fa-solid fa-[#landmark] fa-landmark"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-1">Politics</h3>
+          <p class="text-xs text-slate-400">Indian Constitution, State Politics & Global Affairs</p>
+          <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-emerald-400">200 Questions</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. LOADING SCREEN -->
+    <div id="loading-screen" class="hidden flex flex-col items-center justify-center py-16 space-y-4 fade-in">
+      <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-slate-300 font-semibold animate-pulse" id="loading-text">Preparing Questions...</p>
+    </div>
+
+    <!-- 3. ACTIVE QUIZ SCREEN -->
+    <div id="quiz-screen" class="hidden fade-in space-y-6">
+      
+      <!-- Progress & Difficulty Level Indicator -->
+      <div class="glass-card p-4 rounded-xl flex justify-between items-center">
+        <div>
+          <span id="level-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            BEGINNER LEVEL
+          </span>
+        </div>
+        <div class="text-xs text-slate-400 font-semibold">
+          Question <span id="current-q-num" class="text-white font-bold">1</span> / 200
+        </div>
+      </div>
+
+      <!-- Question Box -->
+      <div class="glass-card p-6 rounded-2xl space-y-4">
+        <h2 id="question-text" class="text-lg md:text-xl font-bold text-white leading-relaxed">
+          <!-- Question inserted dynamically -->
+        </h2>
+
+        <!-- Options Grid -->
+        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <!-- 4 Options loaded via JS -->
+        </div>
+      </div>
+
+      <!-- Explanation Box (Appears on Wrong Answer) -->
+      <div id="explanation-box" class="hidden glass-card p-5 rounded-2xl border-l-4 border-amber-500 bg-amber-950/20 space-y-3 fade-in">
+        <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
+          <i class="fa-solid fa-[#circle-info] fa-circle-info"></i> Explanation / వివరణ:
+        </div>
+        <p id="explanation-text" class="text-sm text-slate-300 leading-relaxed"></p>
+        <button onclick="nextQuestion()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition">
+          Next Question <i class="fa-solid fa-[#arrow-right] fa-arrow-right ml-2"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-8 text-xs text-slate-500 text-center">
+    Mega Bilingual Quiz Engine • Designed for High Performance
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Sample Dataset Structure (Expandable to 200 Questions per Category)
+    const quizDataset = {
+      movies: generateCategoryQuestions('movies'),
+      gk: generateCategoryQuestions('gk'),
+      politics: generateCategoryQuestions('politics')
+    };
+
+    let currentCategory = null;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let currentLang = 'te'; // 'te' for Telugu, 'en' for English
+    let canAnswer = true;
+
+    // Helper to generate 200 dynamic questions with levels
+    function generateCategoryQuestions(category) {
+      let questions = [];
+      for (let i = 1; i <= 200; i++) {
+        let level = "beginner";
+        if (i > 50 && i <= 150) level = "medium";
+        if (i > 150) level = "hard";
+
+        let sample = getSampleData(category, i, level);
+        questions.push(sample);
+      }
+      return questions;
+    }
+
+    function getSampleData(cat, num, level) {
+      // Dynamic Mock Questions covering all levels
+      if(cat === 'movies') {
+        return {
+          id: num,
+          level: level,
+          q_te: `${num}. 'RRR' సినిమాలో 'నాటు నాటు' పాటకి ఆస్కార్ అవార్డు వచ్చిన కేటగిరీ ఏది?`,
+          q_en: `${num}. In which category did 'Naatu Naatu' song from 'RRR' win an Oscar?`,
+          options_te: ["బెస్ట్ ఒరిజినల్ సాంగ్", "బెస్ట్ బ్యాక్‌గ్రౌండ్ స్కోర్", "బెస్ట్ లొకేషన్", "బెస్ట్ డైరెక్షన్"],
+          options_en: ["Best Original Song", "Best Background Score", "Best Sound Design", "Best Direction"],
+          correct: 0,
+          exp_te: "2023లో RRR సినిమాలోని 'నాటు నాటు' పాటకు గాను ఎమ్.ఎమ్. కీరవాణి & చంద్రబోస్ లార్డ్స్‌లో 'Best Original Song' ఆస్కార్ అందుకున్నారు.",
+          exp_en: "M.M. Keeravani and Chandrabose won the Academy Award for Best Original Song in 2023."
+        };
+      } else if(cat === 'gk') {
+        return {
+          id: num,
+          level: level,
+          q_te: `${num}. భారత రాజ్యాంగ పితామహుడిగా ఎవరిని పేర్కొంటారు?`,
+          q_en: `${num}. Who is known as the Father of the Indian Constitution?`,
+          options_te: ["డా. బి.ఆర్. అంబేడ్కర్", "మహాత్మా గాంధీ", "జవహర్‌లాల్ నెహ్రూ", "సర్దార్ వల్లభాయ్ పటేల్"],
+          options_en: ["Dr. B.R. Ambedkar", "Mahatma Gandhi", "Jawaharlal Nehru", "Sardar Vallabhbhai Patel"],
+          correct: 0,
+          exp_te: "డాక్టర్ బి.ఆర్. అంబేడ్కర్ డ్రాఫ్టింగ్ కమిటీ చైర్మన్‌గా వ్యవహరించి భారత రాజ్యాంగాన్ని రూపొందించారు.",
+          exp_en: "Dr. B.R. Ambedkar was the Chairman of the Drafting Committee of the Constitution."
+        };
+      } else {
+        return {
+          id: num,
+          level: level,
+          q_te: `${num}. భారతదేశ ప్రస్తుత రాష్ట్రపతి ఎవరు?`,
+          q_en: `${num}. Who is the current President of India?`,
+          options_te: ["ద్రౌపది ముర్ము", "రామ్‌నాథ్ కోవింద్", "వెంకయ్య నాయుడు", "ద్రౌపది దేవి"],
+          options_en: ["Droupadi Murmu", "Ram Nath Kovind", "Venkaiah Naidu", "Yashwant Sinha"],
+          correct: 0,
+          exp_te: "ద్రౌపది ముర్ము భారతదేశ 15వ రాష్ట్రపతిగా ప్రమాణ స్వీకారం చేశారు.",
+          exp_en: "Droupadi Murmu is the 15th President of India."
+        };
+      }
+    }
+
+    function startQuiz(category) {
+      currentCategory = category;
+      currentQuestionIndex = 0;
+      score = 0;
+      document.getElementById('user-score').innerText = score;
+
+      // Show Loading Screen
+      document.getElementById('module-select-screen').classList.add('hidden');
+      document.getElementById('loading-screen').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('loading-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        loadQuestion();
+      }, 700);
+    }
+
+    function loadQuestion() {
+      canAnswer = true;
+      document.getElementById('explanation-box').classList.add('hidden');
+      
+      const qData = quizDataset[currentCategory][currentQuestionIndex];
+
+      // Update Difficulty Badge
+      const badge = document.getElementById('level-badge');
+      if(qData.level === 'beginner') {
+        badge.innerText = "BEGINNER (Q 1-50)";
+        badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+      } else if(qData.level === 'medium') {
+        badge.innerText = "MEDIUM (Q 51-150)";
+        badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+      } else {
+        badge.innerText = "VERY HARD (Q 151-200)";
+        badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
+      }
+
+      document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
+      
+      // Language display
+      document.getElementById('question-text').innerText = currentLang === 'te' ? qData.q_te : qData.q_en;
+
+      const optsContainer = document.getElementById('options-container');
+      optsContainer.innerHTML = '';
+
+      const options = currentLang === 'te' ? qData.options_te : qData.options_en;
+
+      options.forEach((optText, index) => {
+        const btn = document.createElement('button');
+        btn.className = "p-4 text-left rounded-xl glass-card border border-slate-700 hover:border-blue-500 hover:bg-slate-800/80 transition font-medium text-sm text-slate-200 flex items-center justify-between group";
+        btn.innerHTML = `<span>${optText}</span> <i class="fa-regular fa-circle text-slate-500 group-hover:text-blue-400"></i>`;
+        btn.onclick = () => handleAnswer(index, btn);
+        optsContainer.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(selectedIndex, btnElement) {
+      if (!canAnswer) return;
+      canAnswer = false;
+
+      const qData = quizDataset[currentCategory][currentQuestionIndex];
+      const optsContainer = document.getElementById('options-container');
+      const allBtns = optsContainer.children;
+
+      if (selectedIndex === qData.correct) {
+        // Correct Answer
+        btnElement.classList.remove('border-slate-700');
+        btnElement.classList.add('border-emerald-500', 'bg-emerald-950/40', 'text-emerald-300');
+        btnElement.querySelector('i').className = "fa-solid fa-circle-check text-emerald-400";
+        
+        score += 10;
+        document.getElementById('user-score').innerText = score;
+
+        // Auto Next Question Shift on Correct Answer
+        setTimeout(() => {
+          nextQuestion();
+        }, 800);
+
+      } else {
+        // Wrong Answer
+        btnElement.classList.remove('border-slate-700');
+        btnElement.classList.add('border-rose-500', 'bg-rose-950/40', 'text-rose-300');
+        btnElement.querySelector('i').className = "fa-solid fa-circle-xmark text-rose-400";
+
+        // Highlight Correct Option
+        allBtns[qData.correct].classList.add('border-emerald-500', 'bg-emerald-950/40', 'text-emerald-300');
+
+        // Show Explanation Box
+        document.getElementById('explanation-text').innerText = currentLang === 'te' ? qData.exp_te : qData.exp_en;
+        document.getElementById('explanation-box').classList.remove('hidden');
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < 200) {
+        loadQuestion();
+      } else {
+        alert(`Congratulations! Completed module with score: ${score}`);
+        goHome();
+      }
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'te' ? 'en' : 'te';
+      document.getElementById('lang-btn-text').innerText = currentLang === 'te' ? 'TE / EN' : 'EN / TE';
+      if(currentCategory && !document.getElementById('quiz-screen').classList.contains('hidden')) {
+        loadQuestion();
+      }
+    }
+
+    function goHome() {
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('loading-screen').classList.add('hidden');
+      document.getElementById('module-select-screen').classList.remove('hidden');
+    }
+  </script>
+</body>
+  </html>
+  
